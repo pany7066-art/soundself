@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
-
+ 
 # ── Page config ────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="SoundSelf",
@@ -11,7 +11,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
-
+ 
 # ── Custom CSS ──────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
@@ -24,7 +24,7 @@ html, body, [class*="css"] { font-family: 'DM Mono', monospace; }
                   letter-spacing: 0.1em; color: #999; margin: 1rem 0 0.5rem; }
 </style>
 """, unsafe_allow_html=True)
-
+ 
 # ── My tracks ────────────────────────────────────────────────────────────────
 SAMPLE_TRACKS = [
     {
@@ -88,7 +88,7 @@ SAMPLE_TRACKS = [
         "comment": "The ending of Frieren feels like grief and warmth arriving at the same moment.",
     },
 ]
-
+ 
 SAMPLE_USERS = [
     {"name": "Yuna K.", "match": 89, "genres": ["J-Pop", "Pop Ballad", "Hakka Folk"],
      "tracks": ["Anytime Anywhere – milet", "Yoru ni Kakeru – YOASOBI"]},
@@ -99,27 +99,27 @@ SAMPLE_USERS = [
     {"name": "Jaeyoung C.", "match": 58, "genres": ["Alt-rock", "Electronic", "Dance-pop"],
      "tracks": ["Kaiju – Sakanaction", "Closer – NIN"]},
 ]
-
+ 
 MOOD_TAGS = ["late-night drive", "rainy day", "deep focus",
              "morning ritual", "peak hour", "nostalgia"]
-
+ 
 # ── Session state init ────────────────────────────────────────────────────────
 if "tracks" not in st.session_state:
     st.session_state.tracks = SAMPLE_TRACKS.copy()
-
+ 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 with st.sidebar:
     st.markdown("## 🎵 SoundSelf")
     st.markdown("*share your music. share your worldview.*")
     st.divider()
-
+ 
     page = st.radio(
         "Navigate",
         ["My Music Profile", "Taste Compatibility", "Mood Tags",
          "Taste Map", "Curator Feed", "Spotify Import"],
         label_visibility="collapsed",
     )
-
+ 
     st.divider()
     st.markdown('<div class="section-header">add a track</div>', unsafe_allow_html=True)
     with st.form("add_track", clear_on_submit=True):
@@ -139,9 +139,9 @@ with st.sidebar:
                 "year": datetime.now().year, "comment": new_comment,
             })
             st.success(f"Added: {new_title}")
-
+ 
 df = pd.DataFrame(st.session_state.tracks)
-
+ 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 1 — MY MUSIC PROFILE
 # ══════════════════════════════════════════════════════════════════════════════
@@ -149,24 +149,24 @@ if page == "My Music Profile":
     st.markdown('<div class="main-title">My Music World</div>', unsafe_allow_html=True)
     st.markdown('<div class="tagline">a profile that speaks louder than words</div>',
                 unsafe_allow_html=True)
-
+ 
     # ── Stats row ──
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Tracks", len(df))
     c2.metric("Genres", df["genre"].nunique())
     c3.metric("Avg BPM", int(df["bpm"].mean()))
     c4.metric("Mood tags", df["mood"].nunique())
-
+ 
     st.divider()
-
+ 
     # ── Filter ──
     col_filter, _ = st.columns([2, 3])
     with col_filter:
         genre_filter = st.multiselect(
             "Filter by genre", options=df["genre"].unique().tolist(), default=[])
-
+ 
     display_df = df if not genre_filter else df[df["genre"].isin(genre_filter)]
-
+ 
     # ── Genre bar chart ──
     st.markdown('<div class="section-header">genre breakdown</div>', unsafe_allow_html=True)
     genre_counts = df["genre"].value_counts().reset_index()
@@ -180,7 +180,7 @@ if page == "My Music Profile":
                             plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                             xaxis=dict(title=""), yaxis=dict(title=""))
     st.plotly_chart(fig_genre, use_container_width=True)
-
+ 
     # ── Track cards ──
     st.markdown('<div class="section-header">your tracks</div>', unsafe_allow_html=True)
     for _, row in display_df.iterrows():
@@ -188,8 +188,8 @@ if page == "My Music Profile":
             st.markdown(f'<div class="track-comment">"{row["comment"]}"</div>',
                         unsafe_allow_html=True)
             st.caption(f"🏷️ {row['mood']}  ·  {row.get('year', '—')}")
-
-
+ 
+ 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 2 — TASTE COMPATIBILITY
 # ══════════════════════════════════════════════════════════════════════════════
@@ -197,11 +197,11 @@ elif page == "Taste Compatibility":
     st.markdown('<div class="main-title">Taste Compatibility</div>', unsafe_allow_html=True)
     st.markdown('<div class="tagline">discover who truly gets your curation</div>',
                 unsafe_allow_html=True)
-
+ 
     # ── Match bars ──
     st.markdown('<div class="section-header">curators ranked by match score</div>',
                 unsafe_allow_html=True)
-
+ 
     user_df = pd.DataFrame(SAMPLE_USERS)
     fig_match = go.Figure()
     fig_match.add_trace(go.Bar(
@@ -219,11 +219,11 @@ elif page == "Taste Compatibility":
         plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
     )
     st.plotly_chart(fig_match, use_container_width=True)
-
+ 
     st.divider()
     st.markdown('<div class="section-header">shared genre overlap</div>',
                 unsafe_allow_html=True)
-
+ 
     my_genres = set(df["genre"].unique())
     overlap_data = []
     for u in SAMPLE_USERS:
@@ -231,7 +231,7 @@ elif page == "Taste Compatibility":
         overlap_data.append({"curator": u["name"], "match": u["match"],
                               "shared_genres": ", ".join(shared) or "—",
                               "shared_count": len(shared)})
-
+ 
     overlap_df = pd.DataFrame(overlap_data)
     fig_scatter = px.scatter(
         overlap_df, x="shared_count", y="match",
@@ -245,15 +245,15 @@ elif page == "Taste Compatibility":
                                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                                coloraxis_showscale=False)
     st.plotly_chart(fig_scatter, use_container_width=True)
-
+ 
     st.markdown('<div class="section-header">curator profiles</div>',
                 unsafe_allow_html=True)
     for u in SAMPLE_USERS:
         with st.expander(f"**{u['name']}** — {u['match']}% match"):
             st.caption("Genres: " + " · ".join(u["genres"]))
             st.caption("Recent tracks: " + " / ".join(u["tracks"]))
-
-
+ 
+ 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 3 — MOOD TAGS
 # ══════════════════════════════════════════════════════════════════════════════
@@ -261,7 +261,7 @@ elif page == "Mood Tags":
     st.markdown('<div class="main-title">Mood Tag System</div>', unsafe_allow_html=True)
     st.markdown('<div class="tagline">music filtered by emotional context</div>',
                 unsafe_allow_html=True)
-
+ 
     # ── Mood donut ──
     mood_counts = df["mood"].value_counts().reset_index()
     mood_counts.columns = ["mood", "count"]
@@ -274,16 +274,16 @@ elif page == "Mood Tags":
                             paper_bgcolor="rgba(0,0,0,0)",
                             legend=dict(orientation="v", x=1, y=0.5))
     st.plotly_chart(fig_mood, use_container_width=True)
-
+ 
     st.divider()
     selected_mood = st.selectbox("Browse tracks by mood", ["— all —"] + MOOD_TAGS)
-
+ 
     filtered = df if selected_mood == "— all —" else df[df["mood"] == selected_mood]
-
+ 
     st.markdown(f'<div class="section-header">'
                 f'{len(filtered)} track{"s" if len(filtered)!=1 else ""} found</div>',
                 unsafe_allow_html=True)
-
+ 
     for _, row in filtered.iterrows():
         col_a, col_b = st.columns([3, 1])
         with col_a:
@@ -294,8 +294,8 @@ elif page == "Mood Tags":
             st.caption(row["genre"])
             st.caption(f"{row['bpm']} bpm")
         st.divider()
-
-
+ 
+ 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 4 — TASTE MAP
 # ══════════════════════════════════════════════════════════════════════════════
@@ -303,7 +303,7 @@ elif page == "Taste Map":
     st.markdown('<div class="main-title">Taste Map</div>', unsafe_allow_html=True)
     st.markdown('<div class="tagline">your musical identity, visualized</div>',
                 unsafe_allow_html=True)
-
+ 
     # Map BPM → mood axis (intensity), genre → electronic axis
     GENRE_X = {
         "Dance-pop": 0.92, "Electronic": 0.88, "Alt-rock": 0.72,
@@ -311,12 +311,12 @@ elif page == "Taste Map":
         "R&B": 0.42, "Indie": 0.38, "Folk": 0.18,
         "Hakka Folk": 0.10, "Classical": 0.08, "Jazz": 0.28, "Other": 0.50,
     }
-
+ 
     df_map = df.copy()
     df_map["x"] = df_map["genre"].map(lambda g: GENRE_X.get(g, 0.5))
     df_map["y"] = (df_map["bpm"] - df_map["bpm"].min()) / (df_map["bpm"].max() - df_map["bpm"].min() + 1)
     df_map["size"] = 18
-
+ 
     fig_map = px.scatter(
         df_map, x="x", y="y", text="title",
         color="genre", size="size",
@@ -336,7 +336,7 @@ elif page == "Taste Map":
         legend=dict(orientation="h", y=-0.15),
     )
     st.plotly_chart(fig_map, use_container_width=True)
-
+ 
     st.markdown('<div class="section-header">BPM distribution by genre</div>',
                 unsafe_allow_html=True)
     fig_bpm = px.box(
@@ -348,8 +348,8 @@ elif page == "Taste Map":
                            plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
                            xaxis_title="", yaxis_title="bpm")
     st.plotly_chart(fig_bpm, use_container_width=True)
-
-
+ 
+ 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 5 — CURATOR FEED
 # ══════════════════════════════════════════════════════════════════════════════
@@ -357,7 +357,7 @@ elif page == "Curator Feed":
     st.markdown('<div class="main-title">Curator Discovery</div>', unsafe_allow_html=True)
     st.markdown('<div class="tagline">music found through people, not algorithms</div>',
                 unsafe_allow_html=True)
-
+ 
     FEED = [
         {"curator": "Yuna K.", "match": 89, "track": "Anytime Anywhere", "artist": "milet",
          "genre": "Pop Ballad", "comment": "This one rewired how I think about endings. Nothing resolves, and that's the beauty."},
@@ -366,10 +366,10 @@ elif page == "Curator Feed":
         {"curator": "Sojin L.", "match": 74, "track": "Running Wild", "artist": "Jin",
          "genre": "Pop Ballad", "comment": "The gap between what you say and what you feel — this song lives exactly there."},
     ]
-
+ 
     min_match = st.slider("Minimum match %", 50, 100, 70, step=5)
     filtered_feed = [f for f in FEED if f["match"] >= min_match]
-
+ 
     for item in filtered_feed:
         with st.container():
             cola, colb = st.columns([5, 1])
@@ -381,11 +381,11 @@ elif page == "Curator Feed":
             with colb:
                 st.markdown(f"### {item['match']}%")
             st.divider()
-
+ 
     if not filtered_feed:
         st.info("No curators above that match threshold. Try lowering the slider.")
-
-
+ 
+ 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 6 — SPOTIFY IMPORT
 # Credentials live in Streamlit Cloud secrets — never exposed to the browser.
@@ -396,19 +396,19 @@ elif page == "Spotify Import":
         get_auth_url, handle_callback, get_valid_token,
         fetch_liked_songs, fetch_audio_features, build_track_df,
     )
-
+ 
     st.markdown('<div class="main-title">🎧 Spotify Liked Songs</div>',
                 unsafe_allow_html=True)
     st.markdown('<div class="tagline">import your saved tracks and analyze your real taste</div>',
                 unsafe_allow_html=True)
-
+ 
     # ── Handle OAuth callback on every page load ───────────────────────────────
     # handle_callback() detects ?code=&state=, validates CSRF state, exchanges
     # the code server-side (client_secret never leaves the server), stores the
     # token in session_state, and clears the URL.
     if handle_callback():
         st.rerun()
-
+ 
     # ── Not yet authenticated ──────────────────────────────────────────────────
     if "spotify_token" not in st.session_state:
         st.markdown("### Connect your Spotify account")
@@ -425,14 +425,14 @@ elif page == "Spotify Import":
             )
             st.markdown(f"[Click here if not redirected automatically]({auth_url})")
         st.stop()
-
+ 
     # ── Authenticated ──────────────────────────────────────────────────────────
     access_token = get_valid_token()           # auto-refreshes if needed
     if not access_token:
         st.warning("Session expired — please log in again.")
         st.session_state.pop("spotify_token", None)
         st.rerun()
-
+ 
     col_logout, col_limit = st.columns([1, 2])
     with col_logout:
         if st.button("Logout"):
@@ -441,134 +441,273 @@ elif page == "Spotify Import":
             st.rerun()
     with col_limit:
         fetch_limit = st.slider("How many tracks to import", 50, 500, 100, step=50)
-
+ 
     if st.button("⬇️ Fetch Liked Songs", type="primary") or "sp_liked_df" not in st.session_state:
         with st.spinner(f"Fetching up to {fetch_limit} liked songs…"):
             raw = fetch_liked_songs(access_token, fetch_limit)
-        st.caption(f"API returned {len(raw)} raw items")
-        ids = [item["track"]["id"] for item in raw if item.get("track") and item["track"].get("id")]
-        st.caption(f"Valid track IDs: {len(ids)}")
-        with st.spinner("Loading audio features (BPM, energy, valence…)"):
-            feats = fetch_audio_features(access_token, ids)
-        st.caption(f"Audio features fetched: {len(feats)}")
+ 
+        ids = [item["track"]["id"] for item in raw if item.get("track")]
+ 
+        # ── Try audio features; silently fall back if the API rejects them ──
+        feats = {}
+        with st.spinner("Requesting audio features (BPM, energy, valence…)"):
+            try:
+                feats = fetch_audio_features(access_token, ids)
+            except Exception:
+                feats = {}
+ 
+        has_audio = bool(feats)  # False when Spotify blocks the endpoint
+ 
         sp_df = build_track_df(raw, feats)
         st.session_state["sp_liked_df"] = sp_df
-        if len(sp_df) == 0:
-            st.warning("0 tracks imported. If API returned 0 items, add your Spotify account email to User Management in the Spotify Dashboard.")
+        st.session_state["sp_has_audio"] = has_audio
+ 
+        if has_audio:
+            st.success(f"Imported {len(sp_df)} tracks with full audio features!")
         else:
-            st.success(f"Imported {len(sp_df)} tracks!")
-
+            st.success(f"Imported {len(sp_df)} tracks.")
+            st.warning(
+                "**Audio features unavailable** — Spotify restricted this endpoint "
+                "for apps in Development Mode (Nov 2024 policy change). "
+                "The dashboard below uses **popularity, duration, and release year** instead. "
+                "To unlock BPM / energy / valence: apply for Extended Quota Mode in your "
+                "[Spotify Developer Dashboard](https://developer.spotify.com/dashboard).",
+                icon="ℹ️",
+            )
+ 
     sp_df = st.session_state.get("sp_liked_df")
     if sp_df is None or sp_df.empty:
         st.stop()
-
-    # ── Stats ──────────────────────────────────────────────────────────────────
-    import plotly.express as px
-    import plotly.graph_objects as go
-
+ 
+    has_audio = st.session_state.get("sp_has_audio", False)
+ 
+    # ── Stats row — adapts to what data we actually have ───────────────────────
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Tracks", len(sp_df))
-    c2.metric("Avg BPM", int(sp_df["bpm"].mean()))
-    c3.metric("Avg Energy", f"{sp_df['energy'].mean():.0%}")
-    c4.metric("Avg Valence", f"{sp_df['valence'].mean():.0%}")
-
+    c2.metric("Artists", sp_df["artist"].nunique())
+    if has_audio:
+        c3.metric("Avg BPM",    int(sp_df["bpm"].mean()))
+        c4.metric("Avg Energy", f"{sp_df['energy'].mean():.0%}")
+    else:
+        c3.metric("Avg Popularity", f"{sp_df['popularity'].mean():.0f} / 100")
+        c4.metric("Avg Duration",   f"{(sp_df['duration_ms'].mean()/60000):.1f} min")
+ 
     st.divider()
-
-    tab1, tab2, tab3, tab4 = st.tabs(["🎵 Track List", "🗺️ Taste Map", "📊 Audio Features", "📤 Export"])
-
-    # ── Tab 1: Track list ──────────────────────────────────────────────────────
+ 
+    # ── Tabs — audio-feature tabs only shown when data is available ────────────
+    if has_audio:
+        tab1, tab2, tab3, tab4 = st.tabs(
+            ["🎵 Track List", "🗺️ Taste Map", "📊 Audio Features", "📤 Export"]
+        )
+    else:
+        tab1, tab2, tab4 = st.tabs(
+            ["🎵 Track List", "📊 Library Analysis", "📤 Export"]
+        )
+        tab3 = None  # no audio-feature tab
+ 
+    # ── Tab 1: Track list (always shown) ──────────────────────────────────────
     with tab1:
-        mood_sel = st.selectbox("Filter by auto-mood",
-            ["— all —", "peak hour", "morning ritual", "deep focus", "rainy day", "nostalgia"])
-        disp = sp_df if mood_sel == "— all —" else sp_df[sp_df["auto_mood"] == mood_sel]
+        if has_audio:
+            mood_sel = st.selectbox("Filter by auto-mood",
+                ["— all —", "peak hour", "morning ritual", "deep focus", "rainy day"])
+            disp = sp_df if mood_sel == "— all —" else sp_df[sp_df["auto_mood"] == mood_sel]
+        else:
+            disp = sp_df
+ 
+        search = st.text_input("Search by title or artist", placeholder="e.g. milet")
+        if search:
+            mask = (
+                sp_df["title"].str.contains(search, case=False, na=False) |
+                sp_df["artist"].str.contains(search, case=False, na=False)
+            )
+            disp = disp[mask]
+ 
         for _, row in disp.head(50).iterrows():
-            cola, colb, colc = st.columns([3, 1, 1])
+            cola, colb, colc = st.columns([4, 1, 1])
             with cola:
-                link = f"[**{row['title']}**]({row['spotify_url']})" if row['spotify_url'] else f"**{row['title']}**"
+                link = (f"[**{row['title']}**]({row['spotify_url']})"
+                        if row.get("spotify_url") else f"**{row['title']}**")
                 st.markdown(f"{link}  —  {row['artist']}")
-                st.caption(row["album"] + "  ·  " + str(row["year"]))
+                st.caption(str(row.get("album", "")) + "  ·  " + str(row.get("year", "")))
             with colb:
-                st.caption(f"♩ {row['bpm']} bpm")
-                st.caption(f"⚡ energy {row['energy']:.0%}")
+                st.caption(f"⭐ pop {row.get('popularity', '—')}")
+                if has_audio:
+                    st.caption(f"♩ {row['bpm']} bpm")
             with colc:
-                st.caption(f"☀️ valence {row['valence']:.0%}")
-                st.caption(row["auto_mood"])
+                st.caption(f"⏱ {row.get('duration_ms', 0)/60000:.1f} min")
+                if has_audio:
+                    st.caption(row.get("auto_mood", ""))
             st.divider()
+ 
         if len(disp) > 50:
-            st.info(f"Showing first 50 of {len(disp)} tracks. Export CSV for full list.")
-
-    # ── Tab 2: Taste map (valence × energy) ───────────────────────────────────
-    with tab2:
-        st.markdown('<div class="section-header">valence (happiness) × energy — your emotional fingerprint</div>',
-                    unsafe_allow_html=True)
-        fig_taste = px.scatter(
-            sp_df, x="valence", y="energy",
-            color="auto_mood", hover_data=["title", "artist", "bpm"],
-            color_discrete_sequence=px.colors.qualitative.Pastel,
-            labels={"valence": "← sad · · · happy →", "energy": "← calm · · · intense →"},
-            height=420,
-            opacity=0.75,
-        )
-        fig_taste.update_layout(
-            margin=dict(l=0,r=0,t=10,b=0),
-            plot_bgcolor="rgba(0,0,0,0.02)", paper_bgcolor="rgba(0,0,0,0)",
-            xaxis=dict(range=[0, 1], showgrid=True, gridcolor="rgba(128,128,128,0.1)"),
-            yaxis=dict(range=[0, 1], showgrid=True, gridcolor="rgba(128,128,128,0.1)"),
-            legend=dict(orientation="h", y=-0.15),
-        )
-        # Quadrant labels
-        for (x, y, txt) in [(0.25,0.85,"deep focus\n(dark + intense)"),
-                             (0.75,0.85,"peak hour\n(happy + intense)"),
-                             (0.25,0.15,"rainy day\n(dark + calm)"),
-                             (0.75,0.15,"morning ritual\n(happy + calm)")]:
-            fig_taste.add_annotation(x=x, y=y, text=txt, showarrow=False,
-                                      font=dict(size=9, color="#aaa"), align="center")
-        st.plotly_chart(fig_taste, use_container_width=True)
-
-        st.markdown('<div class="section-header">BPM distribution</div>', unsafe_allow_html=True)
-        fig_bpm2 = px.histogram(sp_df, x="bpm", nbins=30, height=200,
-                                 color_discrete_sequence=["#5DCAA5"])
-        fig_bpm2.update_layout(margin=dict(l=0,r=0,t=10,b=0),
-                                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-                                bargap=0.05, showlegend=False)
-        st.plotly_chart(fig_bpm2, use_container_width=True)
-
-    # ── Tab 3: Audio feature radar ─────────────────────────────────────────────
-    with tab3:
-        st.markdown('<div class="section-header">average audio profile</div>',
-                    unsafe_allow_html=True)
-        features = ["energy", "valence", "danceability", "acousticness",
-                    "instrumentalness", "speechiness"]
-        avg_vals = [sp_df[f].mean() for f in features]
-        fig_radar = go.Figure(go.Scatterpolar(
-            r=avg_vals + [avg_vals[0]],
-            theta=features + [features[0]],
-            fill="toself",
-            fillcolor="rgba(93,202,165,0.2)",
-            line=dict(color="#5DCAA5", width=2),
-        ))
-        fig_radar.update_layout(
-            polar=dict(radialaxis=dict(range=[0,1], showticklabels=True,
-                                       tickfont=dict(size=9))),
-            height=350, margin=dict(l=30,r=30,t=20,b=20),
-            paper_bgcolor="rgba(0,0,0,0)",
-        )
-        st.plotly_chart(fig_radar, use_container_width=True)
-
-        st.markdown('<div class="section-header">danceability vs popularity</div>',
-                    unsafe_allow_html=True)
-        fig_dp = px.scatter(sp_df, x="danceability", y="popularity",
-                             hover_data=["title","artist"], height=260,
-                             color="energy", color_continuous_scale="Teal",
-                             labels={"danceability":"danceability","popularity":"popularity"})
-        fig_dp.update_layout(margin=dict(l=0,r=0,t=10,b=0),
-                              plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-                              coloraxis_showscale=False)
-        st.plotly_chart(fig_dp, use_container_width=True)
-
-    # ── Tab 4: Export ──────────────────────────────────────────────────────────
+            st.info(f"Showing first 50 of {len(disp)} tracks. Export CSV for the full list.")
+ 
+    # ── Tab 2 (with audio): Taste map valence × energy ─────────────────────────
+    if has_audio and tab3 is not None:
+        with tab2:
+            st.markdown(
+                '<div class="section-header">valence (happiness) × energy — your emotional fingerprint</div>',
+                unsafe_allow_html=True,
+            )
+            fig_taste = px.scatter(
+                sp_df, x="valence", y="energy",
+                color="auto_mood", hover_data=["title", "artist", "bpm"],
+                color_discrete_sequence=px.colors.qualitative.Pastel,
+                labels={"valence": "← sad · · · happy →",
+                        "energy": "← calm · · · intense →"},
+                height=420, opacity=0.75,
+            )
+            fig_taste.update_layout(
+                margin=dict(l=0,r=0,t=10,b=0),
+                plot_bgcolor="rgba(0,0,0,0.02)", paper_bgcolor="rgba(0,0,0,0)",
+                xaxis=dict(range=[0,1], showgrid=True, gridcolor="rgba(128,128,128,0.1)"),
+                yaxis=dict(range=[0,1], showgrid=True, gridcolor="rgba(128,128,128,0.1)"),
+                legend=dict(orientation="h", y=-0.15),
+            )
+            for (x, y, txt) in [
+                (0.25, 0.85, "deep focus\n(dark + intense)"),
+                (0.75, 0.85, "peak hour\n(happy + intense)"),
+                (0.25, 0.15, "rainy day\n(dark + calm)"),
+                (0.75, 0.15, "morning ritual\n(happy + calm)"),
+            ]:
+                fig_taste.add_annotation(x=x, y=y, text=txt, showarrow=False,
+                                         font=dict(size=9, color="#aaa"), align="center")
+            st.plotly_chart(fig_taste, use_container_width=True)
+ 
+            st.markdown('<div class="section-header">BPM distribution</div>', unsafe_allow_html=True)
+            fig_bpm2 = px.histogram(sp_df, x="bpm", nbins=30, height=200,
+                                     color_discrete_sequence=["#5DCAA5"])
+            fig_bpm2.update_layout(
+                margin=dict(l=0,r=0,t=10,b=0),
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                bargap=0.05, showlegend=False,
+            )
+            st.plotly_chart(fig_bpm2, use_container_width=True)
+ 
+        # ── Tab 3 (with audio): radar + danceability ──────────────────────────
+        with tab3:
+            st.markdown('<div class="section-header">average audio profile</div>',
+                        unsafe_allow_html=True)
+            feat_cols = ["energy", "valence", "danceability",
+                         "acousticness", "instrumentalness", "speechiness"]
+            avg_vals = [sp_df[f].mean() for f in feat_cols]
+            fig_radar = go.Figure(go.Scatterpolar(
+                r=avg_vals + [avg_vals[0]],
+                theta=feat_cols + [feat_cols[0]],
+                fill="toself",
+                fillcolor="rgba(93,202,165,0.2)",
+                line=dict(color="#5DCAA5", width=2),
+            ))
+            fig_radar.update_layout(
+                polar=dict(radialaxis=dict(range=[0,1], showticklabels=True,
+                                           tickfont=dict(size=9))),
+                height=350, margin=dict(l=30,r=30,t=20,b=20),
+                paper_bgcolor="rgba(0,0,0,0)",
+            )
+            st.plotly_chart(fig_radar, use_container_width=True)
+ 
+            st.markdown('<div class="section-header">danceability vs popularity</div>',
+                        unsafe_allow_html=True)
+            fig_dp = px.scatter(
+                sp_df, x="danceability", y="popularity",
+                hover_data=["title", "artist"], height=260,
+                color="energy", color_continuous_scale="Teal",
+                labels={"danceability": "danceability", "popularity": "popularity"},
+            )
+            fig_dp.update_layout(
+                margin=dict(l=0,r=0,t=10,b=0),
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                coloraxis_showscale=False,
+            )
+            st.plotly_chart(fig_dp, use_container_width=True)
+ 
+    # ── Tab 2 (no audio): library analysis using available metadata ────────────
+    else:
+        with tab2:
+            # Popularity distribution
+            st.markdown('<div class="section-header">popularity distribution</div>',
+                        unsafe_allow_html=True)
+            fig_pop = px.histogram(
+                sp_df, x="popularity", nbins=20, height=200,
+                color_discrete_sequence=["#5DCAA5"],
+                labels={"popularity": "Spotify popularity score (0–100)"},
+            )
+            fig_pop.update_layout(
+                margin=dict(l=0,r=0,t=10,b=0),
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                bargap=0.05, showlegend=False,
+            )
+            st.plotly_chart(fig_pop, use_container_width=True)
+ 
+            # Release year histogram
+            st.markdown('<div class="section-header">when were these songs released?</div>',
+                        unsafe_allow_html=True)
+            sp_df["year_int"] = pd.to_numeric(sp_df["year"], errors="coerce")
+            year_counts = (
+                sp_df.dropna(subset=["year_int"])
+                .groupby("year_int")
+                .size()
+                .reset_index(name="count")
+            )
+            fig_year = px.bar(
+                year_counts, x="year_int", y="count", height=200,
+                color_discrete_sequence=["#AFA9EC"],
+                labels={"year_int": "release year", "count": "tracks"},
+            )
+            fig_year.update_layout(
+                margin=dict(l=0,r=0,t=10,b=0),
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                bargap=0.05, showlegend=False,
+            )
+            st.plotly_chart(fig_year, use_container_width=True)
+ 
+            # Top artists
+            st.markdown('<div class="section-header">your most-liked artists</div>',
+                        unsafe_allow_html=True)
+            artist_counts = (
+                sp_df["artist"].value_counts().head(15).reset_index()
+            )
+            artist_counts.columns = ["artist", "tracks"]
+            fig_artists = px.bar(
+                artist_counts, x="tracks", y="artist",
+                orientation="h", height=340,
+                color="tracks", color_continuous_scale="Teal",
+                labels={"tracks": "liked tracks", "artist": ""},
+            )
+            fig_artists.update_layout(
+                margin=dict(l=0,r=40,t=10,b=0),
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                coloraxis_showscale=False,
+                yaxis=dict(autorange="reversed"),
+            )
+            st.plotly_chart(fig_artists, use_container_width=True)
+ 
+            # Popularity × Duration scatter
+            st.markdown('<div class="section-header">popularity vs track length</div>',
+                        unsafe_allow_html=True)
+            sp_df["duration_min"] = sp_df["duration_ms"] / 60000
+            fig_pd = px.scatter(
+                sp_df, x="duration_min", y="popularity",
+                hover_data=["title", "artist", "year"],
+                height=260,
+                color="popularity", color_continuous_scale="Teal",
+                labels={"duration_min": "duration (min)",
+                        "popularity": "popularity score"},
+                opacity=0.7,
+            )
+            fig_pd.update_layout(
+                margin=dict(l=0,r=0,t=10,b=0),
+                plot_bgcolor="rgba(0,0,0,0.02)", paper_bgcolor="rgba(0,0,0,0)",
+                coloraxis_showscale=False,
+            )
+            st.plotly_chart(fig_pd, use_container_width=True)
+ 
+    # ── Export tab (always shown) ──────────────────────────────────────────────
     with tab4:
-        st.markdown("Download your full liked-songs dataset as CSV — use it in your SoundSelf profile or for further analysis.")
+        st.markdown(
+            "Download your full liked-songs dataset as CSV — "
+            "use it in your SoundSelf profile or for further analysis."
+        )
         csv = sp_df.to_csv(index=False).encode("utf-8")
         st.download_button(
             label="⬇️ Download CSV",
@@ -577,21 +716,28 @@ elif page == "Spotify Import":
             mime="text/csv",
         )
         st.markdown("**Import top tracks into My Music Profile:**")
-        top_n = st.slider("How many top-energy tracks to import", 3, 20, 5)
-        top_tracks = sp_df.nlargest(top_n, "energy")
+        sort_col  = "popularity"  # always available
+        sort_label = "most popular"
+        top_n = st.slider(f"How many {sort_label} tracks to import", 3, 20, 5)
+        top_tracks = sp_df.nlargest(top_n, sort_col)
         if st.button(f"➕ Add {top_n} tracks to My Profile"):
             added = 0
-            existing_titles = {t["title"] for t in st.session_state.tracks}
+            existing = {t["title"] for t in st.session_state.tracks}
             for _, row in top_tracks.iterrows():
-                if row["title"] not in existing_titles:
+                if row["title"] not in existing:
+                    comment = (
+                        f"Energy {row['energy']:.0%} · Valence {row['valence']:.0%} — imported from Spotify"
+                        if has_audio
+                        else f"Popularity {row['popularity']}/100 · {row.get('duration_ms',0)/60000:.1f} min — imported from Spotify"
+                    )
                     st.session_state.tracks.append({
                         "title":   row["title"],
                         "artist":  row["artist"],
                         "genre":   "Other",
-                        "bpm":     int(row["bpm"]),
-                        "mood":    row["auto_mood"],
-                        "year":    int(str(row["year"])[:4]) if str(row["year"]).isdigit() else datetime.now().year,
-                        "comment": f"Energy {row['energy']:.0%} · Valence {row['valence']:.0%} — imported from Spotify",
+                        "bpm":     int(row["bpm"]) if has_audio else 0,
+                        "mood":    row.get("auto_mood", "—"),
+                        "year":    int(str(row["year"])[:4]) if str(row.get("year","0")).isdigit() else datetime.now().year,
+                        "comment": comment,
                     })
                     added += 1
             st.success(f"Added {added} new tracks to My Music Profile!")
