@@ -210,6 +210,15 @@ def build_track_df(raw_items: list[dict], features: dict[str, dict]) -> pd.DataF
             "mode":             f.get("mode", -1),
         })
     df = pd.DataFrame(rows)
+    if df.empty:
+        return df
+    # Some tracks (local files, podcasts) may have null audio features → fill 0
+    for col in ["duration_ms", "bpm", "energy", "valence", "danceability",
+                "acousticness", "instrumentalness", "speechiness", "loudness"]:
+        if col not in df.columns:
+            df[col] = 0
+        else:
+            df[col] = df[col].fillna(0)
     df["duration_min"] = (df["duration_ms"] / 60000).round(2)
     df["auto_mood"]    = df.apply(_mood_label, axis=1)
     return df
