@@ -445,12 +445,18 @@ elif page == "Spotify Import":
     if st.button("⬇️ Fetch Liked Songs", type="primary") or "sp_liked_df" not in st.session_state:
         with st.spinner(f"Fetching up to {fetch_limit} liked songs…"):
             raw = fetch_liked_songs(access_token, fetch_limit)
-        ids = [item["track"]["id"] for item in raw if item.get("track")]
+        st.caption(f"API returned {len(raw)} raw items")
+        ids = [item["track"]["id"] for item in raw if item.get("track") and item["track"].get("id")]
+        st.caption(f"Valid track IDs: {len(ids)}")
         with st.spinner("Loading audio features (BPM, energy, valence…)"):
             feats = fetch_audio_features(access_token, ids)
+        st.caption(f"Audio features fetched: {len(feats)}")
         sp_df = build_track_df(raw, feats)
         st.session_state["sp_liked_df"] = sp_df
-        st.success(f"Imported {len(sp_df)} tracks!")
+        if len(sp_df) == 0:
+            st.warning("0 tracks imported. If API returned 0 items, add your Spotify account email to User Management in the Spotify Dashboard.")
+        else:
+            st.success(f"Imported {len(sp_df)} tracks!")
 
     sp_df = st.session_state.get("sp_liked_df")
     if sp_df is None or sp_df.empty:
