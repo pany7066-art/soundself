@@ -146,13 +146,20 @@ def _get(access_token: str, url: str, params: dict | None = None) -> dict | None
 def fetch_liked_songs(access_token: str, limit: int = 200) -> list[dict]:
     tracks, url = [], f"{_API_BASE}/me/tracks"
     params = {"limit": 50, "offset": 0}
-    while url and len(tracks) < limit:
-        data = _get(access_token, url, params)
+    r = requests.get(url, headers={"Authorization": f"Bearer {access_token}"},
+                     params=params, timeout=10)
+    st.caption(f"HTTP {r.status_code} — {r.text[:300]}")
+    if not r.ok:
+        return []
+    data = r.json()
+    tracks.extend(data.get("items", []))
+    next_url = data.get("next")
+    while next_url and len(tracks) < limit:
+        data = _get(access_token, next_url)
         if not data:
             break
         tracks.extend(data.get("items", []))
-        url    = data.get("next")
-        params = {}
+        next_url = data.get("next")
     return tracks[:limit]
 
 
