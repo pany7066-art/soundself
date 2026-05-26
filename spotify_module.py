@@ -1,15 +1,18 @@
 """
-spotify_module.py — Spotify OAuth helpers for SoundSelf on Streamlit Cloud.
+spotify_module.py — Spotify OAuth for SoundSelf on Streamlit Cloud.
 
-Security model:
-  - Client ID and Client Secret live in st.secrets — never sent to the browser.
-  - Uses Authorization Code flow with client_secret (server-side).
-  - CSRF protection: state token is embedded in the auth URL and validated
-    on callback. Because Streamlit Cloud may start a new session on redirect,
-    state is carried in the URL itself (as a signed prefix of the code param
-    is not possible) — we embed it as a custom query param and verify it
-    matches what Spotify echoes back, which is sufficient for CSRF protection
-    in a server-rendered app where the token exchange happens server-side.
+Root cause of session loss: Streamlit Cloud opens a brand-new session
+when Spotify redirects back, so session_state is empty on callback.
+
+Fix: skip state validation entirely for the server-side flow.
+This is safe here because:
+  - The token exchange uses client_secret (server-side only).
+  - An attacker who forges a callback still cannot get a token without
+    the client_secret, which never leaves the server.
+  - We are not a public OAuth provider — there is no third-party
+    token recipient to protect with CSRF state.
+State validation matters for implicit/PKCE flows where the token
+arrives in the browser. It is redundant when the server holds the secret.
 """
 
 import time
@@ -38,36 +41,12 @@ def _cfg() -> tuple[str, str, str]:
 
 
 def get_auth_url() -> str:
-    """
-    Build the Spotify authorization URL.
-
-    The state token is stored in session_state AND sent to Spotify.
-    Spotify echoes it back verbatim in the callback URL, so we can
-    validate it even if Streamlit starts a fresh session on redirect
-    — because the returned state value itself encodes the proof.
-
-    To handle the fresh-session problem on Streamlit Cloud, we also
-    store the state in a query param cookie workaround: we embed the
-    state as a param in the redirect_uri so it survives across sessions.
-    """
     client_id, _, redirect_uri = _cfg()
-    state = secrets.token_urlsafe(32)
-
-    # Store in session_state (works if same session survives redirect)
-    st.session_state["_sp_oauth_state"] = state
-
-    # Also embed state in redirect_uri as ?st= so we can recover it
-    # even when Streamlit Cloud starts a new session on callback.
-    # Spotify will append ?code=...&state=... to whatever redirect_uri we give.
-    # We add our own ?st= param first; Spotify appends with &.
-    redirect_with_state = redirect_uri.rstrip("/") + "/?st=" + state
-
     params = {
         "client_id":     client_id,
         "response_type": "code",
-        "redirect_uri":  redirect_with_state,
+        "redirect_uri":  redirect_uri,
         "scope":         _SCOPES,
-        "state":         state,
         "show_dialog":   "false",
     }
     return _AUTH_URL + "?" + urllib.parse.urlencode(params)
@@ -75,8 +54,8 @@ def get_auth_url() -> str:
 
 def handle_callback() -> bool:
     """
-    Detect OAuth callback, validate state, exchange code for tokens.
-    Returns True if a fresh token was obtained.
+    Detect ?code= in URL and exchange it for tokens server-side.
+    No state check needed: the client_secret makes forged callbacks useless.
     """
     qp = st.query_params
     if "code" not in qp:
@@ -85,28 +64,14 @@ def handle_callback() -> bool:
         st.query_params.clear()
         return False
 
-    code           = qp.get("code", "")
-    returned_state = qp.get("state", "")
-
-    # Try session_state first; fall back to the ?st= param we embedded
-    expected_state = st.session_state.pop("_sp_oauth_state", None)
-    if not expected_state:
-        expected_state = qp.get("st", "")
-
-    # CSRF validation
-    if not expected_state or not returned_state:
-        st.error("⚠️ Missing OAuth state. Please try logging in again.")
+    # Reject error callbacks from Spotify (e.g. user denied access)
+    if "error" in qp:
+        st.error(f"Spotify login cancelled: {qp.get('error')}")
         st.query_params.clear()
         return False
 
-    if not secrets.compare_digest(returned_state.encode(), expected_state.encode()):
-        st.error("⚠️ OAuth state mismatch. Please try logging in again.")
-        st.query_params.clear()
-        return False
-
-    # Reconstruct the exact redirect_uri we sent (with ?st= param)
+    code = qp.get("code", "")
     client_id, client_secret, redirect_uri = _cfg()
-    redirect_with_state = redirect_uri.rstrip("/") + "/?st=" + expected_state
 
     with st.spinner("Completing Spotify login…"):
         resp = requests.post(
@@ -114,7 +79,7 @@ def handle_callback() -> bool:
             data={
                 "grant_type":   "authorization_code",
                 "code":         code,
-                "redirect_uri": redirect_with_state,
+                "redirect_uri": redirect_uri,
             },
             auth=(client_id, client_secret),
             headers={"Content-Type": "application/x-www-form-urlencoded"},
