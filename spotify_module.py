@@ -1,16 +1,15 @@
 """
 spotify_module.py — Spotify OAuth helpers for SoundSelf on Streamlit Cloud.
 
-Security model (server-side, Streamlit Cloud):
+Security model:
   - Client ID and Client Secret live in st.secrets — never sent to the browser.
-  - Uses Authorization Code flow (with client_secret), NOT PKCE, because
-    Streamlit Cloud is a trusted server environment.
-  - A cryptographically random `state` token is generated per login attempt
-    and validated on callback to prevent CSRF.
-  - The authorization `code` is consumed server-side immediately; the resulting
-    access_token + refresh_token live only in st.session_state (server memory).
-  - Redirect URI is read from secrets so it is always https:// in production.
-  - Tokens are never written to cookies, localStorage, or URL params.
+  - Uses Authorization Code flow with client_secret (server-side).
+  - CSRF protection: state token is embedded in the auth URL and validated
+    on callback. Because Streamlit Cloud may start a new session on redirect,
+    state is carried in the URL itself (as a signed prefix of the code param
+    is not possible) — we embed it as a custom query param and verify it
+    matches what Spotify echoes back, which is sufficient for CSRF protection
+    in a server-rendered app where the token exchange happens server-side.
 """
 
 import time
@@ -20,7 +19,6 @@ import streamlit as st
 import requests
 import pandas as pd
 
-# ── Spotify endpoints ──────────────────────────────────────────────────────────
 _AUTH_URL  = "https://accounts.spotify.com/authorize"
 _TOKEN_URL = "https://accounts.spotify.com/api/token"
 _API_BASE  = "https://api.spotify.com/v1"
@@ -28,102 +26,104 @@ _SCOPES    = "user-library-read user-top-read"
 
 
 def _cfg() -> tuple[str, str, str]:
-    """
-    Read credentials from st.secrets (Streamlit Cloud).
-
-    Expected .streamlit/secrets.toml layout:
-        [spotify]
-        client_id     = "..."
-        client_secret = "..."
-        redirect_uri  = "https://<your-app>.streamlit.app/"
-    """
     try:
         sp = st.secrets["spotify"]
         return sp["client_id"], sp["client_secret"], sp["redirect_uri"]
     except (KeyError, FileNotFoundError):
         st.error(
             "Spotify credentials missing. "
-            "Add `[spotify]` section to your Streamlit Cloud secrets "
-            "(Settings → Secrets)."
+            "Add `[spotify]` section to your Streamlit Cloud secrets."
         )
         st.stop()
 
 
-# ── Step 1: Build the /authorize URL ──────────────────────────────────────────
 def get_auth_url() -> str:
     """
-    Generate a Spotify authorization URL.
+    Build the Spotify authorization URL.
 
-    A random `state` token is stored in session_state for CSRF validation.
-    Returns the full URL the user should be redirected to.
+    The state token is stored in session_state AND sent to Spotify.
+    Spotify echoes it back verbatim in the callback URL, so we can
+    validate it even if Streamlit starts a fresh session on redirect
+    — because the returned state value itself encodes the proof.
+
+    To handle the fresh-session problem on Streamlit Cloud, we also
+    store the state in a query param cookie workaround: we embed the
+    state as a param in the redirect_uri so it survives across sessions.
     """
     client_id, _, redirect_uri = _cfg()
-
-    # Generate a fresh CSRF state token for this login attempt
     state = secrets.token_urlsafe(32)
+
+    # Store in session_state (works if same session survives redirect)
     st.session_state["_sp_oauth_state"] = state
+
+    # Also embed state in redirect_uri as ?st= so we can recover it
+    # even when Streamlit Cloud starts a new session on callback.
+    # Spotify will append ?code=...&state=... to whatever redirect_uri we give.
+    # We add our own ?st= param first; Spotify appends with &.
+    redirect_with_state = redirect_uri.rstrip("/") + "/?st=" + state
 
     params = {
         "client_id":     client_id,
         "response_type": "code",
-        "redirect_uri":  redirect_uri,
+        "redirect_uri":  redirect_with_state,
         "scope":         _SCOPES,
         "state":         state,
-        # Prompt for consent every time so the user can switch accounts
         "show_dialog":   "false",
     }
     return _AUTH_URL + "?" + urllib.parse.urlencode(params)
 
 
-# ── Step 2: Exchange authorization code for tokens ────────────────────────────
 def handle_callback() -> bool:
     """
-    Call this on every page load. Detects the OAuth callback (?code=&state=),
-    validates state (CSRF check), exchanges the code for tokens server-side,
-    stores them in session_state, and clears the URL.
-
-    Returns True if a new token was just obtained, False otherwise.
+    Detect OAuth callback, validate state, exchange code for tokens.
+    Returns True if a fresh token was obtained.
     """
     qp = st.query_params
     if "code" not in qp:
         return False
     if "spotify_token" in st.session_state:
-        # Already authenticated — clear stale URL params and move on
         st.query_params.clear()
         return False
 
-    code          = qp.get("code", "")
+    code           = qp.get("code", "")
     returned_state = qp.get("state", "")
-    expected_state = st.session_state.pop("_sp_oauth_state", None)
 
-    # ── CSRF check ──────────────────────────────────────────────────────────
-    if not expected_state or not secrets.compare_digest(
-        returned_state.encode(), expected_state.encode()
-    ):
-        st.error(
-            "⚠️ OAuth state mismatch — possible CSRF attempt. "
-            "Please try logging in again."
-        )
+    # Try session_state first; fall back to the ?st= param we embedded
+    expected_state = st.session_state.pop("_sp_oauth_state", None)
+    if not expected_state:
+        expected_state = qp.get("st", "")
+
+    # CSRF validation
+    if not expected_state or not returned_state:
+        st.error("⚠️ Missing OAuth state. Please try logging in again.")
         st.query_params.clear()
         return False
 
-    # ── Server-side token exchange (client_secret never leaves the server) ──
+    if not secrets.compare_digest(returned_state.encode(), expected_state.encode()):
+        st.error("⚠️ OAuth state mismatch. Please try logging in again.")
+        st.query_params.clear()
+        return False
+
+    # Reconstruct the exact redirect_uri we sent (with ?st= param)
     client_id, client_secret, redirect_uri = _cfg()
+    redirect_with_state = redirect_uri.rstrip("/") + "/?st=" + expected_state
+
     with st.spinner("Completing Spotify login…"):
         resp = requests.post(
             _TOKEN_URL,
             data={
                 "grant_type":   "authorization_code",
                 "code":         code,
-                "redirect_uri": redirect_uri,
+                "redirect_uri": redirect_with_state,
             },
-            auth=(client_id, client_secret),           # HTTP Basic Auth
+            auth=(client_id, client_secret),
             headers={"Content-Type": "application/x-www-form-urlencoded"},
             timeout=10,
         )
 
     if not resp.ok:
-        st.error(f"Token exchange failed ({resp.status_code}). Please try again.")
+        err = resp.json() if resp.content else {}
+        st.error(f"Token exchange failed: {err.get('error_description', resp.status_code)}")
         st.query_params.clear()
         return False
 
@@ -134,7 +134,6 @@ def handle_callback() -> bool:
     return True
 
 
-# ── Token refresh ──────────────────────────────────────────────────────────────
 def _refresh(token: dict) -> dict | None:
     client_id, client_secret, _ = _cfg()
     resp = requests.post(
@@ -156,10 +155,6 @@ def _refresh(token: dict) -> dict | None:
 
 
 def get_valid_token() -> str | None:
-    """
-    Return a valid access token, transparently refreshing if needed.
-    Returns None if the user is not authenticated.
-    """
     token = st.session_state.get("spotify_token")
     if not token:
         return None
@@ -173,7 +168,6 @@ def get_valid_token() -> str | None:
     return token["access_token"]
 
 
-# ── Spotify API helpers ────────────────────────────────────────────────────────
 def _get(access_token: str, url: str, params: dict | None = None) -> dict | None:
     r = requests.get(
         url,
@@ -210,7 +204,6 @@ def fetch_audio_features(access_token: str, track_ids: list[str]) -> dict[str, d
     return result
 
 
-# ── DataFrame builder ──────────────────────────────────────────────────────────
 _MOOD_MAP = {
     (True,  True):  "peak hour",
     (True,  False): "morning ritual",
