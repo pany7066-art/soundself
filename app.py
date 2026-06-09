@@ -136,14 +136,138 @@ SAMPLE_TRACKS = [
 ]
 
 SAMPLE_USERS = [
-    {"name": "Yuna K.", "match": 89, "genres": ["J-Pop", "Pop Ballad", "Hakka Folk"],
-     "tracks": ["Anytime Anywhere – milet", "Yoru ni Kakeru – YOASOBI"]},
-    {"name": "Minhyuk P.", "match": 81, "genres": ["Dance-pop", "Alt-rock", "Pop Ballad"],
-     "tracks": ["Abracadabra – Lady Gaga", "New Jeans – New Jeans"]},
-    {"name": "Sojin L.", "match": 74, "genres": ["Pop Ballad", "J-Pop", "R&B"],
-     "tracks": ["Don't Say You Love Me – Jin", "Blinding Lights – The Weeknd"]},
-    {"name": "Jaeyoung C.", "match": 58, "genres": ["Alt-rock", "Electronic", "Dance-pop"],
-     "tracks": ["Kaiju – Sakanaction", "Fake Plastic Trees – Radiohead"]},
+    {
+        "name": "Yuna K.", "match": 89,
+        "genres": ["J-Pop", "Pop Ballad", "Hakka Folk"],
+        "tracks": ["Anytime Anywhere – milet", "Yoru ni Kakeru – YOASOBI",
+                   "Don't Say You Love Me – Jin", "Lemon – Kenshi Yonezu",
+                   "Scarborough Fair – Simon & Garfunkel"],
+        "track_data": [
+            {"title": "Anytime Anywhere",  "artist": "milet",              "genre": "Pop Ballad",  "bpm": 109, "mood": "nostalgia",         "year": 2023, "language": "Japanese"},
+            {"title": "Yoru ni Kakeru",    "artist": "YOASOBI",            "genre": "J-Pop",       "bpm": 132, "mood": "late-night drive",   "year": 2019, "language": "Japanese"},
+            {"title": "Don't Say You Love Me", "artist": "Jin",            "genre": "Pop Ballad",  "bpm": 85,  "mood": "rainy day",          "year": 2025, "language": "Korean"},
+            {"title": "Lemon",             "artist": "Kenshi Yonezu",      "genre": "Pop Ballad",  "bpm": 96,  "mood": "rainy day",          "year": 2018, "language": "Japanese"},
+            {"title": "Scarborough Fair",  "artist": "Simon & Garfunkel",  "genre": "Folk",        "bpm": 88,  "mood": "nostalgia",          "year": 1966, "language": "English"},
+            {"title": "Kawaii Dake Ja Dame Desu Ka", "artist": "CUTIE STREET", "genre": "J-Pop",   "bpm": 118, "mood": "morning ritual",     "year": 2024, "language": "Japanese"},
+            {"title": "Gyakkō",            "artist": "Ado",                "genre": "J-Pop",       "bpm": 145, "mood": "deep focus",         "year": 2022, "language": "Japanese"},
+            {"title": "Xia Dan Shui He",   "artist": "Kau-kung Ngak-tui",  "genre": "Hakka Folk",  "bpm": 72,  "mood": "nostalgia",          "year": 1999, "language": "Hakka"},
+        ],
+        "bio": "J-Pop devotee and nostalgic folk listener. Music is memory for her.",
+    },
+    {
+        "name": "Minhyuk P.", "match": 81,
+        "genres": ["Dance-pop", "Alt-rock", "Pop Ballad"],
+        "tracks": ["Abracadabra – Lady Gaga", "Kaiju – Sakanaction",
+                   "Blinding Lights – The Weeknd", "Idol – YOASOBI"],
+        "track_data": [
+            {"title": "Abracadabra",       "artist": "Lady Gaga",          "genre": "Dance-pop",   "bpm": 126, "mood": "peak hour",          "year": 2025, "language": "English"},
+            {"title": "Kaiju",             "artist": "Sakanaction",        "genre": "Alt-rock",    "bpm": 180, "mood": "deep focus",         "year": 2025, "language": "Japanese"},
+            {"title": "Blinding Lights",   "artist": "The Weeknd",         "genre": "Synthpop",    "bpm": 171, "mood": "late-night drive",   "year": 2019, "language": "English"},
+            {"title": "Idol",              "artist": "YOASOBI",            "genre": "J-Pop",       "bpm": 180, "mood": "peak hour",          "year": 2023, "language": "Japanese"},
+            {"title": "Dynamite",          "artist": "BTS",                "genre": "Dance-pop",   "bpm": 114, "mood": "morning ritual",     "year": 2020, "language": "English"},
+            {"title": "Levitating",        "artist": "Dua Lipa",           "genre": "Dance-pop",   "bpm": 103, "mood": "peak hour",          "year": 2020, "language": "English"},
+            {"title": "As It Was",         "artist": "Harry Styles",       "genre": "Indie-pop",   "bpm": 174, "mood": "morning ritual",     "year": 2022, "language": "English"},
+            {"title": "TAIDADA",           "artist": "ZUTOMAYO",           "genre": "Alt-rock",    "bpm": 172, "mood": "deep focus",         "year": 2025, "language": "Japanese"},
+        ],
+        "bio": "High-energy listener. Lives in the 160–180 BPM zone whenever possible.",
+    },
+    {
+        "name": "Sojin L.", "match": 74,
+        "genres": ["Pop Ballad", "J-Pop", "R&B"],
+        "tracks": ["Don't Say You Love Me – Jin", "Blinding Lights – The Weeknd",
+                   "Glimpse of Us – Joji", "Redbone – Childish Gambino"],
+        "track_data": [
+            {"title": "Don't Say You Love Me", "artist": "Jin",            "genre": "Pop Ballad",  "bpm": 85,  "mood": "rainy day",          "year": 2025, "language": "Korean"},
+            {"title": "Glimpse of Us",     "artist": "Joji",               "genre": "R&B",         "bpm": 74,  "mood": "rainy day",          "year": 2022, "language": "English"},
+            {"title": "Redbone",           "artist": "Childish Gambino",   "genre": "R&B",         "bpm": 84,  "mood": "late-night drive",   "year": 2016, "language": "English"},
+            {"title": "Lemon",             "artist": "Kenshi Yonezu",      "genre": "Pop Ballad",  "bpm": 96,  "mood": "rainy day",          "year": 2018, "language": "Japanese"},
+            {"title": "Anti-Hero",         "artist": "Taylor Swift",       "genre": "Indie-pop",   "bpm": 97,  "mood": "rainy day",          "year": 2022, "language": "English"},
+            {"title": "Anytime Anywhere",  "artist": "milet",              "genre": "Pop Ballad",  "bpm": 109, "mood": "nostalgia",          "year": 2023, "language": "Japanese"},
+            {"title": "Fake Plastic Trees","artist": "Radiohead",          "genre": "Alt-rock",    "bpm": 72,  "mood": "deep focus",         "year": 1995, "language": "English"},
+        ],
+        "bio": "R&B and ballad collector. Slow BPM, maximum emotional weight.",
+    },
+    {
+        "name": "Jaeyoung C.", "match": 58,
+        "genres": ["Alt-rock", "Electronic", "Dance-pop"],
+        "tracks": ["Kaiju – Sakanaction", "Fake Plastic Trees – Radiohead",
+                   "Teardrop – Massive Attack", "Breathe – Télépopmusik"],
+        "track_data": [
+            {"title": "Kaiju",             "artist": "Sakanaction",        "genre": "Alt-rock",    "bpm": 180, "mood": "deep focus",         "year": 2025, "language": "Japanese"},
+            {"title": "Fake Plastic Trees","artist": "Radiohead",          "genre": "Alt-rock",    "bpm": 72,  "mood": "deep focus",         "year": 1995, "language": "English"},
+            {"title": "Teardrop",          "artist": "Massive Attack",     "genre": "Trip-hop",    "bpm": 76,  "mood": "deep focus",         "year": 1998, "language": "English"},
+            {"title": "Breathe",           "artist": "Télépopmusik",       "genre": "Electronic",  "bpm": 95,  "mood": "morning ritual",     "year": 2001, "language": "English"},
+            {"title": "Yoru no Odoriko",   "artist": "Sakanaction",        "genre": "Alt-rock",    "bpm": 128, "mood": "late-night drive",   "year": 2013, "language": "Japanese"},
+            {"title": "Motion Sickness",   "artist": "Phoebe Bridgers",    "genre": "Indie Folk",  "bpm": 148, "mood": "rainy day",          "year": 2017, "language": "English"},
+            {"title": "The Sound of Silence", "artist": "Simon & Garfunkel","genre": "Folk",       "bpm": 104, "mood": "deep focus",         "year": 1964, "language": "English"},
+            {"title": "TAIDADA",           "artist": "ZUTOMAYO",           "genre": "Alt-rock",    "bpm": 172, "mood": "deep focus",         "year": 2025, "language": "Japanese"},
+        ],
+        "bio": "Alt-rock purist. If there's no texture and tension, he's already skipped it.",
+    },
+    {
+        "name": "Aiko T.", "match": 66,
+        "genres": ["Indie-pop", "Folk", "Trip-hop"],
+        "tracks": ["Motion Sickness – Phoebe Bridgers", "Teardrop – Massive Attack",
+                   "As It Was – Harry Styles"],
+        "track_data": [
+            {"title": "Motion Sickness",   "artist": "Phoebe Bridgers",    "genre": "Indie Folk",  "bpm": 148, "mood": "rainy day",          "year": 2017, "language": "English"},
+            {"title": "Teardrop",          "artist": "Massive Attack",     "genre": "Trip-hop",    "bpm": 76,  "mood": "deep focus",         "year": 1998, "language": "English"},
+            {"title": "As It Was",         "artist": "Harry Styles",       "genre": "Indie-pop",   "bpm": 174, "mood": "morning ritual",     "year": 2022, "language": "English"},
+            {"title": "Anti-Hero",         "artist": "Taylor Swift",       "genre": "Indie-pop",   "bpm": 97,  "mood": "rainy day",          "year": 2022, "language": "English"},
+            {"title": "Flowers",           "artist": "Miley Cyrus",        "genre": "Pop",         "bpm": 118, "mood": "morning ritual",     "year": 2023, "language": "English"},
+            {"title": "Scarborough Fair",  "artist": "Simon & Garfunkel",  "genre": "Folk",        "bpm": 88,  "mood": "nostalgia",          "year": 1966, "language": "English"},
+            {"title": "Breathe",           "artist": "Télépopmusik",       "genre": "Electronic",  "bpm": 95,  "mood": "morning ritual",     "year": 2001, "language": "English"},
+        ],
+        "bio": "Indie explorer with a soft spot for atmospheric textures and acoustic warmth.",
+    },
+    {
+        "name": "Riku M.", "match": 45,
+        "genres": ["Dance-pop", "K-Pop", "Synthpop"],
+        "tracks": ["Dynamite – BTS", "Cupid – FIFTY FIFTY",
+                   "Espresso – Sabrina Carpenter", "Levitating – Dua Lipa"],
+        "track_data": [
+            {"title": "Dynamite",          "artist": "BTS",                "genre": "Dance-pop",   "bpm": 114, "mood": "morning ritual",     "year": 2020, "language": "English"},
+            {"title": "Cupid",             "artist": "FIFTY FIFTY",        "genre": "K-Pop",       "bpm": 107, "mood": "morning ritual",     "year": 2023, "language": "Korean"},
+            {"title": "Espresso",          "artist": "Sabrina Carpenter",  "genre": "Dance-pop",   "bpm": 104, "mood": "morning ritual",     "year": 2024, "language": "English"},
+            {"title": "Levitating",        "artist": "Dua Lipa",           "genre": "Dance-pop",   "bpm": 103, "mood": "peak hour",          "year": 2020, "language": "English"},
+            {"title": "Blinding Lights",   "artist": "The Weeknd",         "genre": "Synthpop",    "bpm": 171, "mood": "late-night drive",   "year": 2019, "language": "English"},
+            {"title": "Flowers",           "artist": "Miley Cyrus",        "genre": "Pop",         "bpm": 118, "mood": "morning ritual",     "year": 2023, "language": "English"},
+            {"title": "Abracadabra",       "artist": "Lady Gaga",          "genre": "Dance-pop",   "bpm": 126, "mood": "peak hour",          "year": 2025, "language": "English"},
+        ],
+        "bio": "Pure pop energy. Playlists are basically one long gym session.",
+    },
+    {
+        "name": "Hana W.", "match": 70,
+        "genres": ["R&B", "Indie Folk", "Pop Ballad"],
+        "tracks": ["Redbone – Childish Gambino", "Glimpse of Us – Joji",
+                   "The Sound of Silence – Simon & Garfunkel"],
+        "track_data": [
+            {"title": "Redbone",           "artist": "Childish Gambino",   "genre": "R&B",         "bpm": 84,  "mood": "late-night drive",   "year": 2016, "language": "English"},
+            {"title": "Glimpse of Us",     "artist": "Joji",               "genre": "R&B",         "bpm": 74,  "mood": "rainy day",          "year": 2022, "language": "English"},
+            {"title": "The Sound of Silence","artist": "Simon & Garfunkel","genre": "Folk",        "bpm": 104, "mood": "deep focus",         "year": 1964, "language": "English"},
+            {"title": "Motion Sickness",   "artist": "Phoebe Bridgers",    "genre": "Indie Folk",  "bpm": 148, "mood": "rainy day",          "year": 2017, "language": "English"},
+            {"title": "Fake Plastic Trees","artist": "Radiohead",          "genre": "Alt-rock",    "bpm": 72,  "mood": "deep focus",         "year": 1995, "language": "English"},
+            {"title": "JANE DOE",          "artist": "Kenshi Yonezu",      "genre": "Pop Ballad",  "bpm": 88,  "mood": "rainy day",          "year": 2026, "language": "Japanese"},
+            {"title": "Lemon",             "artist": "Kenshi Yonezu",      "genre": "Pop Ballad",  "bpm": 96,  "mood": "rainy day",          "year": 2018, "language": "Japanese"},
+        ],
+        "bio": "Slow-tempo curator. Emotional depth over everything — rainy playlists are her signature.",
+    },
+    {
+        "name": "Seb D.", "match": 52,
+        "genres": ["Folk", "Indie Folk", "Indie-pop"],
+        "tracks": ["Scarborough Fair – Simon & Garfunkel", "The Sound of Silence – Simon & Garfunkel",
+                   "Fake Plastic Trees – Radiohead"],
+        "track_data": [
+            {"title": "Scarborough Fair",  "artist": "Simon & Garfunkel",  "genre": "Folk",        "bpm": 88,  "mood": "nostalgia",          "year": 1966, "language": "English"},
+            {"title": "The Sound of Silence","artist": "Simon & Garfunkel","genre": "Folk",        "bpm": 104, "mood": "deep focus",         "year": 1964, "language": "English"},
+            {"title": "Fake Plastic Trees","artist": "Radiohead",          "genre": "Alt-rock",    "bpm": 72,  "mood": "deep focus",         "year": 1995, "language": "English"},
+            {"title": "Motion Sickness",   "artist": "Phoebe Bridgers",    "genre": "Indie Folk",  "bpm": 148, "mood": "rainy day",          "year": 2017, "language": "English"},
+            {"title": "Anti-Hero",         "artist": "Taylor Swift",       "genre": "Indie-pop",   "bpm": 97,  "mood": "rainy day",          "year": 2022, "language": "English"},
+            {"title": "As It Was",         "artist": "Harry Styles",       "genre": "Indie-pop",   "bpm": 174, "mood": "morning ritual",     "year": 2022, "language": "English"},
+            {"title": "Breathe",           "artist": "Télépopmusik",       "genre": "Electronic",  "bpm": 95,  "mood": "morning ritual",     "year": 2001, "language": "English"},
+        ],
+        "bio": "Heritage folk listener who also lets indie-pop sneak in. Vinyl > streaming.",
+    },
 ]
 
 MOOD_TAGS = ["late-night drive", "rainy day", "deep focus",
@@ -162,7 +286,7 @@ with st.sidebar:
     page = st.radio(
         "Navigate",
         ["My Music Profile", "Taste Analysis", "Mood Tags",
-         "Taste Map", "Curator Feed", "Spotify Import"],
+         "Taste Map", "User Comparison", "Curator Feed", "Spotify Import"],
         label_visibility="collapsed",
     )
 
@@ -753,7 +877,352 @@ elif page == "Taste Map":
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PAGE 5 — CURATOR FEED
+# PAGE 5 — USER COMPARISON
+# ══════════════════════════════════════════════════════════════════════════════
+elif page == "User Comparison":
+    st.markdown('<div class="main-title">User Comparison</div>', unsafe_allow_html=True)
+    st.markdown('<div class="tagline">explore how your taste overlaps — and diverges — with others</div>',
+                unsafe_allow_html=True)
+
+    # ── User selector ─────────────────────────────────────────────────────────
+    user_names = [u["name"] for u in SAMPLE_USERS]
+    selected_name = st.selectbox("Compare with", user_names,
+                                  format_func=lambda n: f"{n}  ({next(u['match'] for u in SAMPLE_USERS if u['name']==n)}% match)")
+    other = next(u for u in SAMPLE_USERS if u["name"] == selected_name)
+    other_df = pd.DataFrame(other["track_data"])
+
+    # ── Header row ────────────────────────────────────────────────────────────
+    col_me, col_vs, col_them = st.columns([5, 1, 5])
+    with col_me:
+        st.markdown(f"""
+        <div class="persona-card">
+          <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:#5DCAA5;margin-bottom:0.4rem;">you</div>
+          <div style="font-size:1.1rem;font-weight:500;">My Profile</div>
+          <div style="font-size:0.8rem;color:#999;margin-top:0.3rem;">{len(df)} tracks · avg {df['bpm'].mean():.0f} BPM · {df['language'].nunique()} languages</div>
+        </div>""", unsafe_allow_html=True)
+    with col_vs:
+        st.markdown(f"""
+        <div style="text-align:center;padding-top:1.2rem;">
+          <div style="font-size:1.6rem;font-weight:500;color:#AFA9EC;">{other['match']}%</div>
+          <div style="font-size:0.65rem;text-transform:uppercase;letter-spacing:0.1em;color:#666;">match</div>
+        </div>""", unsafe_allow_html=True)
+    with col_them:
+        st.markdown(f"""
+        <div class="persona-card">
+          <div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:#AFA9EC;margin-bottom:0.4rem;">{other['name']}</div>
+          <div style="font-size:1.1rem;font-weight:500;">{other['name']}</div>
+          <div style="font-size:0.8rem;color:#999;margin-top:0.3rem;">{len(other_df)} tracks · avg {other_df['bpm'].mean():.0f} BPM · {other_df['language'].nunique()} languages</div>
+          <div style="font-size:0.78rem;color:#888;margin-top:0.4rem;font-style:italic;">"{other['bio']}"</div>
+        </div>""", unsafe_allow_html=True)
+
+    st.divider()
+
+    tab_c1, tab_c2, tab_c3, tab_c4, tab_c5 = st.tabs([
+        "🎭 Mood Radar",
+        "🎸 Genre Overlap",
+        "⚡ BPM Distribution",
+        "🌍 Language & Era",
+        "🎵 Shared Tracks",
+    ])
+
+    # ── TAB 1: Mood Radar ─────────────────────────────────────────────────────
+    with tab_c1:
+        st.markdown('<div class="section-header">mood fingerprint — you vs them</div>',
+                    unsafe_allow_html=True)
+
+        my_mood_counts   = df["mood"].value_counts()
+        them_mood_counts = other_df["mood"].value_counts()
+        moods = MOOD_TAGS
+
+        my_vals   = [my_mood_counts.get(m, 0)   for m in moods]
+        them_vals = [them_mood_counts.get(m, 0) for m in moods]
+
+        # Normalise to % so track-count difference doesn't skew shapes
+        my_pct   = [v / max(sum(my_vals), 1)   * 100 for v in my_vals]
+        them_pct = [v / max(sum(them_vals), 1) * 100 for v in them_vals]
+
+        fig_radar2 = go.Figure()
+        fig_radar2.add_trace(go.Scatterpolar(
+            r=my_pct + [my_pct[0]], theta=moods + [moods[0]],
+            fill="toself", name="You",
+            fillcolor="rgba(93,202,165,0.18)", line=dict(color="#5DCAA5", width=2),
+        ))
+        fig_radar2.add_trace(go.Scatterpolar(
+            r=them_pct + [them_pct[0]], theta=moods + [moods[0]],
+            fill="toself", name=other["name"],
+            fillcolor="rgba(175,169,236,0.18)", line=dict(color="#AFA9EC", width=2),
+        ))
+        fig_radar2.update_layout(
+            polar=dict(radialaxis=dict(visible=True, range=[0, max(max(my_pct), max(them_pct)) * 1.15],
+                                        showticklabels=False, gridcolor="#333")),
+            height=360, margin=dict(l=30, r=30, t=30, b=30),
+            paper_bgcolor="rgba(0,0,0,0)",
+            legend=dict(orientation="h", y=-0.05),
+        )
+        st.plotly_chart(fig_radar2, use_container_width=True)
+
+        # Mood delta table
+        st.markdown('<div class="section-header">mood gap — where you diverge most</div>',
+                    unsafe_allow_html=True)
+        mood_delta = []
+        for m, my, th in zip(moods, my_pct, them_pct):
+            mood_delta.append({"mood": m, "you (%)": round(my, 1),
+                                f"{other['name']} (%)": round(th, 1),
+                                "gap": round(abs(my - th), 1)})
+        delta_df = pd.DataFrame(mood_delta).sort_values("gap", ascending=False)
+        fig_delta = px.bar(
+            delta_df, x="mood", y="gap",
+            color="gap", color_continuous_scale="RdYlGn_r",
+            labels={"gap": "divergence (%)", "mood": ""},
+            height=220,
+        )
+        fig_delta.update_layout(coloraxis_showscale=False, margin=dict(l=0, r=0, t=10, b=0),
+                                  plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)")
+        st.plotly_chart(fig_delta, use_container_width=True)
+
+        top_gap_mood = delta_df.iloc[0]
+        shared_top   = delta_df[delta_df["gap"] < 5].iloc[0]["mood"] if len(delta_df[delta_df["gap"] < 5]) else "—"
+        st.markdown(f"""
+        <div class="insight-box">
+          <div class="insight-label">🔍 conclusion</div>
+          Your biggest mood divergence is <strong>{top_gap_mood['mood']}</strong>
+          (you {top_gap_mood['you (%)']:.0f}% vs {other['name']} {top_gap_mood[f"{other['name']} (%)"]:.0f}%).
+          Your closest shared mood context is <strong>{shared_top}</strong> — that's where your listening worlds overlap most naturally.
+        </div>""", unsafe_allow_html=True)
+
+    # ── TAB 2: Genre Overlap ──────────────────────────────────────────────────
+    with tab_c2:
+        st.markdown('<div class="section-header">genre distribution — side by side</div>',
+                    unsafe_allow_html=True)
+
+        all_genres = sorted(set(df["genre"].unique()) | set(other_df["genre"].unique()))
+        my_genre_pct   = {g: len(df[df["genre"] == g]) / len(df) * 100           for g in all_genres}
+        them_genre_pct = {g: len(other_df[other_df["genre"] == g]) / len(other_df) * 100 for g in all_genres}
+
+        genre_compare = pd.DataFrame({
+            "genre":      all_genres,
+            "You":        [my_genre_pct[g]   for g in all_genres],
+            other["name"]:[them_genre_pct[g] for g in all_genres],
+        })
+        genre_compare = genre_compare[(genre_compare["You"] > 0) |
+                                       (genre_compare[other["name"]] > 0)]
+        genre_compare = genre_compare.sort_values("You", ascending=False)
+
+        fig_genre_bar = go.Figure()
+        fig_genre_bar.add_trace(go.Bar(name="You", x=genre_compare["genre"],
+                                        y=genre_compare["You"],
+                                        marker_color="#5DCAA5"))
+        fig_genre_bar.add_trace(go.Bar(name=other["name"], x=genre_compare["genre"],
+                                        y=genre_compare[other["name"]],
+                                        marker_color="#AFA9EC"))
+        fig_genre_bar.update_layout(
+            barmode="group", height=280,
+            margin=dict(l=0, r=0, t=10, b=0),
+            plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+            yaxis_title="share (%)", xaxis_title="",
+            legend=dict(orientation="h", y=-0.2),
+        )
+        st.plotly_chart(fig_genre_bar, use_container_width=True)
+
+        # Shared vs exclusive genres
+        my_genres_set   = set(df["genre"].unique())
+        them_genres_set = set(other_df["genre"].unique())
+        shared_genres   = my_genres_set & them_genres_set
+        only_mine       = my_genres_set - them_genres_set
+        only_theirs     = them_genres_set - my_genres_set
+
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Shared genres", len(shared_genres))
+        c2.metric("Only in your library", len(only_mine))
+        c3.metric(f"Only in {other['name']}'s library", len(only_theirs))
+
+        st.markdown(f"""
+        <div class="insight-box">
+          <div class="insight-label">🔍 shared genres</div>
+          {", ".join(sorted(shared_genres)) or "None"}<br>
+          <span style="color:#999;font-size:0.78rem;">
+            Genres you have that {other['name']} doesn't: {", ".join(sorted(only_mine)) or "None"}<br>
+            Genres {other['name']} has that you don't: {", ".join(sorted(only_theirs)) or "None"}
+          </span>
+        </div>""", unsafe_allow_html=True)
+
+    # ── TAB 3: BPM Distribution ───────────────────────────────────────────────
+    with tab_c3:
+        st.markdown('<div class="section-header">BPM distribution — tempo profile</div>',
+                    unsafe_allow_html=True)
+
+        fig_bpm_compare = go.Figure()
+        fig_bpm_compare.add_trace(go.Histogram(
+            x=df["bpm"], name="You", nbinsx=20,
+            marker_color="#5DCAA5", opacity=0.65,
+        ))
+        fig_bpm_compare.add_trace(go.Histogram(
+            x=other_df["bpm"], name=other["name"], nbinsx=20,
+            marker_color="#AFA9EC", opacity=0.65,
+        ))
+        fig_bpm_compare.update_layout(
+            barmode="overlay", height=260,
+            margin=dict(l=0, r=0, t=10, b=0),
+            plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+            xaxis_title="BPM", yaxis_title="tracks",
+            legend=dict(orientation="h", y=-0.2),
+        )
+        st.plotly_chart(fig_bpm_compare, use_container_width=True)
+
+        # Summary stats
+        stats = {
+            "metric":   ["Avg BPM", "Median BPM", "Min BPM", "Max BPM", "BPM Std Dev"],
+            "You":      [f"{df['bpm'].mean():.0f}",   f"{df['bpm'].median():.0f}",
+                         f"{df['bpm'].min()}",         f"{df['bpm'].max()}",
+                         f"{df['bpm'].std():.0f}"],
+            other["name"]: [f"{other_df['bpm'].mean():.0f}",   f"{other_df['bpm'].median():.0f}",
+                            f"{other_df['bpm'].min()}",         f"{other_df['bpm'].max()}",
+                            f"{other_df['bpm'].std():.0f}"],
+        }
+        stats_df = pd.DataFrame(stats).set_index("metric")
+        st.dataframe(stats_df, use_container_width=True)
+
+        bpm_diff = abs(df["bpm"].mean() - other_df["bpm"].mean())
+        faster   = "You" if df["bpm"].mean() > other_df["bpm"].mean() else other["name"]
+        st.markdown(f"""
+        <div class="insight-box">
+          <div class="insight-label">🔍 conclusion</div>
+          <strong>{faster}</strong> listens faster on average by
+          <strong>{bpm_diff:.0f} BPM</strong>.
+          {"That's a significant gap — your energy profiles are quite different."
+           if bpm_diff > 20 else
+           "A small gap — you share a similar sense of musical pace."
+           if bpm_diff < 8 else
+           "A moderate gap — you overlap at medium tempos but diverge at the extremes."}
+        </div>""", unsafe_allow_html=True)
+
+    # ── TAB 4: Language & Era ─────────────────────────────────────────────────
+    with tab_c4:
+        col_lang, col_era = st.columns(2)
+
+        with col_lang:
+            st.markdown('<div class="section-header">language mix</div>', unsafe_allow_html=True)
+            all_langs = sorted(set(df["language"].unique()) | set(other_df["language"].unique()))
+            my_lang_pct   = {l: len(df[df["language"] == l]) / len(df) * 100           for l in all_langs}
+            them_lang_pct = {l: len(other_df[other_df["language"] == l]) / len(other_df) * 100 for l in all_langs}
+
+            lang_compare = pd.DataFrame({
+                "language": all_langs,
+                "You":       [my_lang_pct.get(l, 0)   for l in all_langs],
+                other["name"]:[them_lang_pct.get(l, 0) for l in all_langs],
+            })
+            lang_compare = lang_compare[(lang_compare["You"] > 0) |
+                                         (lang_compare[other["name"]] > 0)]
+            fig_lang_bar = go.Figure()
+            fig_lang_bar.add_trace(go.Bar(name="You",
+                                           x=lang_compare["language"], y=lang_compare["You"],
+                                           marker_color="#5DCAA5"))
+            fig_lang_bar.add_trace(go.Bar(name=other["name"],
+                                           x=lang_compare["language"],
+                                           y=lang_compare[other["name"]],
+                                           marker_color="#AFA9EC"))
+            fig_lang_bar.update_layout(
+                barmode="group", height=260,
+                margin=dict(l=0, r=0, t=10, b=0),
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                yaxis_title="%", xaxis_title="",
+                showlegend=False,
+            )
+            st.plotly_chart(fig_lang_bar, use_container_width=True)
+
+        with col_era:
+            st.markdown('<div class="section-header">release era mix</div>', unsafe_allow_html=True)
+            my_df_era   = df.copy()
+            them_df_era = other_df.copy()
+            my_df_era["decade"]   = (my_df_era["year"] // 10 * 10).astype(str) + "s"
+            them_df_era["decade"] = (them_df_era["year"] // 10 * 10).astype(str) + "s"
+
+            all_decades = sorted(
+                set(my_df_era["decade"].unique()) | set(them_df_era["decade"].unique())
+            )
+            my_era_pct   = {d: len(my_df_era[my_df_era["decade"] == d]) / len(my_df_era) * 100
+                            for d in all_decades}
+            them_era_pct = {d: len(them_df_era[them_df_era["decade"] == d]) / len(them_df_era) * 100
+                            for d in all_decades}
+
+            era_compare = pd.DataFrame({
+                "decade": all_decades,
+                "You":       [my_era_pct.get(d, 0)   for d in all_decades],
+                other["name"]:[them_era_pct.get(d, 0) for d in all_decades],
+            })
+            fig_era = go.Figure()
+            fig_era.add_trace(go.Bar(name="You",
+                                      x=era_compare["decade"], y=era_compare["You"],
+                                      marker_color="#5DCAA5"))
+            fig_era.add_trace(go.Bar(name=other["name"],
+                                      x=era_compare["decade"], y=era_compare[other["name"]],
+                                      marker_color="#AFA9EC"))
+            fig_era.update_layout(
+                barmode="group", height=260,
+                margin=dict(l=0, r=0, t=10, b=0),
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
+                yaxis_title="%", xaxis_title="",
+                showlegend=False,
+            )
+            st.plotly_chart(fig_era, use_container_width=True)
+
+        # Legend (shared, since both charts hide it)
+        st.markdown(f"""
+        <div style="display:flex;gap:1.5rem;margin-top:-0.5rem;margin-bottom:0.5rem;">
+          <span style="color:#5DCAA5;font-size:0.8rem;">■ You</span>
+          <span style="color:#AFA9EC;font-size:0.8rem;">■ {other['name']}</span>
+        </div>""", unsafe_allow_html=True)
+
+        # Language overlap insight
+        shared_langs = set(df["language"].unique()) & set(other_df["language"].unique())
+        my_era_peak   = max(my_era_pct,   key=my_era_pct.get)
+        them_era_peak = max(them_era_pct, key=them_era_pct.get)
+        st.markdown(f"""
+        <div class="insight-box">
+          <div class="insight-label">🔍 conclusion</div>
+          You share <strong>{len(shared_langs)} language(s)</strong> in common
+          ({", ".join(sorted(shared_langs)) or "none"}).
+          Your peak era is the <strong>{my_era_peak}</strong>;
+          {other['name']}'s is the <strong>{them_era_peak}</strong>.
+          {"You're anchored in the same decade — a strong cultural touchpoint." if my_era_peak == them_era_peak
+           else "Different peak eras suggest your musical references come from different cultural moments."}
+        </div>""", unsafe_allow_html=True)
+
+    # ── TAB 5: Shared Tracks ──────────────────────────────────────────────────
+    with tab_c5:
+        my_titles    = set(df["title"].str.strip().str.lower())
+        them_titles  = set(other_df["title"].str.strip().str.lower())
+        shared_titles = my_titles & them_titles
+
+        st.markdown(f'<div class="section-header">{len(shared_titles)} track(s) in both libraries</div>',
+                    unsafe_allow_html=True)
+
+        if shared_titles:
+            shared_rows = df[df["title"].str.strip().str.lower().isin(shared_titles)]
+            for _, row in shared_rows.iterrows():
+                st.markdown(f"**{row['title']}** — {row['artist']}")
+                st.caption(f"{row['genre']}  ·  {row['bpm']} BPM  ·  {row['year']}  ·  {row.get('language','—')}")
+                st.divider()
+        else:
+            st.info("No exact title matches — but your shared genres and moods still suggest musical common ground.")
+
+        # Recommended bridge tracks
+        st.markdown('<div class="section-header">recommended bridge tracks</div>',
+                    unsafe_allow_html=True)
+        st.caption("Tracks from your library that match their top genres — a starting point for sharing.")
+        top_their_genres = other_df["genre"].value_counts().head(2).index.tolist()
+        bridge = df[df["genre"].isin(top_their_genres)].head(5)
+        if not bridge.empty:
+            for _, row in bridge.iterrows():
+                st.markdown(f"**{row['title']}** — {row['artist']}")
+                st.caption(f"{row['genre']}  ·  {row['bpm']} BPM  ·  reason: matches {other['name']}'s top genre")
+                st.divider()
+        else:
+            st.info("No bridge tracks found in overlapping genres.")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PAGE 6 — CURATOR FEED
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == "Curator Feed":
     st.markdown('<div class="main-title">Curator Discovery</div>', unsafe_allow_html=True)
