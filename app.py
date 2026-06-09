@@ -1328,6 +1328,16 @@ elif page == "Spotify Import":
     if sp_df is None or sp_df.empty:
         st.stop()
 
+    # Derive pop_tier if spotify_module didn't add it
+    if "pop_tier" not in sp_df.columns:
+        def _pop_tier(p):
+            if p >= 80:   return "viral"
+            if p >= 50:   return "popular"
+            if p >= 30:   return "mid"
+            return "niche"
+        sp_df["pop_tier"] = sp_df["popularity"].apply(_pop_tier)
+        st.session_state["sp_liked_df"] = sp_df
+
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Tracks", len(sp_df))
     c2.metric("Artists", sp_df["artist"].nunique())
